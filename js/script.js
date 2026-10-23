@@ -65,3 +65,37 @@ function setupNavigation() {
 }
 
 setupNavigation();
+
+function setupDarkMode() {
+    const toggle = document.querySelector("#theme-toggle");
+
+    if (!toggle) return;
+
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    ).matches;
+
+    const useDarkMode = savedTheme
+        ? savedTheme === "dark"
+        : prefersDark;
+
+    function applyTheme(isDark) {
+        document.body.classList.toggle("dark-mode", isDark);
+        toggle.setAttribute("aria-pressed", String(isDark));
+        toggle.textContent = isDark
+            ? "Enable light mode"
+            : "Enable dark mode";
+    }
+
+    applyTheme(useDarkMode);
+
+    toggle.addEventListener("click", () => {
+        const isDark = !document.body.classList.contains("dark-mode");
+
+        applyTheme(isDark);
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+}
+
+setupDarkMode();
