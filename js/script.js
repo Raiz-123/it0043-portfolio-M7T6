@@ -99,3 +99,77 @@ function setupDarkMode() {
 }
 
 setupDarkMode();
+
+const projects = [
+    {
+        title: "Portfolio Website",
+        description: "A responsive website showcasing my skills and work.",
+        category: "Web Design",
+        demoUrl: "",
+        repoUrl: ""
+    },
+    {
+        title: "3D Modeling Project",
+        description: "A 3D modeling project created for my coursework.",
+        category: "3D Art",
+        demoUrl: "",
+        repoUrl: ""
+    },
+    {
+        title: "Typography Design",
+        description: "An original typography concept and visual design.",
+        category: "Graphic Design",
+        demoUrl: "",
+        repoUrl: ""
+    }
+];
+
+function renderProjects(projectItems) {
+    const container = document.querySelector("#project-list");
+
+    if (!container) return;
+
+    container.replaceChildren();
+
+    projectItems.forEach((project) => {
+        const card = document.createElement("article");
+        card.className = "project-card";
+
+        const title = document.createElement("h3");
+        title.textContent = project.title;
+
+        const description = document.createElement("p");
+        description.textContent = project.description;
+
+        const category = document.createElement("p");
+        category.textContent = `Category: ${project.category}`;
+
+        card.append(title, description, category);
+
+        // Add optional links only when valid URLs are provided.
+        [project.demoUrl, project.repoUrl].forEach((url, index) => {
+            if (!url || !isValidHttpUrl(url)) return;
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = index === 0 ? "Live Demo" : "Source Code";
+
+            card.append(link);
+        });
+
+        container.append(card);
+    });
+}
+
+function isValidHttpUrl(value) {
+    try {
+        const url = new URL(value);
+        return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
+renderProjects(projects);
