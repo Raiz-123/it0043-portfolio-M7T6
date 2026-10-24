@@ -1,3 +1,4 @@
+// Keeps the navigation accessible and lets users open or dismiss the menu.
 function setupNavigation() {
     const toggle = document.querySelector("#nav-toggle");
     const nav = document.querySelector("#primary-nav");
@@ -66,6 +67,7 @@ function setupNavigation() {
 
 setupNavigation();
 
+// Lets users choose a theme and remembers their preference between visits.
 function setupDarkMode() {
     const toggle = document.querySelector("#theme-toggle");
 
@@ -124,6 +126,7 @@ const projects = [
     }
 ];
 
+// Builds project cards from data so portfolio content can be updated without hard-coding each card.
 function renderProjects(projectItems) {
     const container = document.querySelector("#project-list");
 
@@ -163,6 +166,7 @@ function renderProjects(projectItems) {
     });
 }
 
+// Prevents project cards from displaying links that use unsupported or unsafe URL protocols.
 function isValidHttpUrl(value) {
     try {
         const url = new URL(value);
@@ -174,7 +178,7 @@ function isValidHttpUrl(value) {
 
 renderProjects(projects);
 
-
+// Validates contact details before submission and helps users locate and correct invalid fields.
 function setupContactForm() {
     const form = document.querySelector("#contact-form");
     if (!form) return;
@@ -220,6 +224,12 @@ function setupContactForm() {
 
     function validateField(field) {
         const message = field.validate(field.input.value);
+
+        if (!field.error) {
+        console.error("Missing error message element for:", field.label);
+        return !message;
+        }
+
         field.error.textContent = message;
 
         if (message) {
