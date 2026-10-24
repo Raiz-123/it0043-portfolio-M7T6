@@ -51,7 +51,36 @@
 
         <section id="contact">
             <h2>Contact Me</h2>
-            <p>Contact form coming in the next implementation stage.</p>
+           
+            <section id="contact">
+    <h2>Contact Me</h2>
+
+    <form id="contact-form" novalidate>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required
+                   aria-describedby="name-error">
+            <p id="name-error" class="field-error" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required
+                   aria-describedby="email-error">
+            <p id="email-error" class="field-error" aria-live="polite"></p>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required
+                      aria-describedby="message-error"></textarea>
+            <p id="message-error" class="field-error" aria-live="polite"></p>
+        </div>
+
+        <button type="submit">Send Message</button>
+        <p id="form-status" role="status" aria-live="polite"></p>
+    </form>
+</section>
         </section>
     </main>
 

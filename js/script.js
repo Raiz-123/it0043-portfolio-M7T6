@@ -173,3 +173,87 @@ function isValidHttpUrl(value) {
 }
 
 renderProjects(projects);
+
+
+function setupContactForm() {
+    const form = document.querySelector("#contact-form");
+    if (!form) return;
+
+    const fields = [
+        {
+            input: form.elements.name,
+            error: document.querySelector("#name-error"),
+            label: "Name",
+            validate(value) {
+                return value.trim()
+                    ? ""
+                    : "Please enter your name.";
+            }
+        },
+        {
+            input: form.elements.email,
+            error: document.querySelector("#email-error"),
+            label: "Email",
+            validate(value) {
+                if (!value.trim()) {
+                    return "Please enter your email address.";
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+                    return "Please enter a valid email address.";
+                }
+
+                return "";
+            }
+        },
+        {
+            input: form.elements.message,
+            error: document.querySelector("#message-error"),
+            label: "Message",
+            validate(value) {
+                return value.trim()
+                    ? ""
+                    : "Please enter a message.";
+            }
+        }
+    ];
+
+    function validateField(field) {
+        const message = field.validate(field.input.value);
+        field.error.textContent = message;
+
+        if (message) {
+            field.input.setAttribute("aria-invalid", "true");
+        } else {
+            field.input.removeAttribute("aria-invalid");
+        }
+
+        return !message;
+    }
+
+    fields.forEach((field) => {
+        field.input.addEventListener("input", () => {
+            validateField(field);
+        });
+    });
+
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const invalidFields = fields.filter(
+            (field) => !validateField(field)
+        );
+
+        if (invalidFields.length > 0) {
+            document.querySelector("#form-status").textContent =
+                "Please correct the highlighted fields.";
+            invalidFields[0].input.focus();
+            return;
+        }
+
+        document.querySelector("#form-status").textContent =
+            "Form validation successful. No message was sent because this portfolio has no backend connected.";
+    });
+}
+
+setupContactForm();
