@@ -119,3 +119,31 @@ body.dark-mode #primary-nav a {
     padding: 0.5rem 0.75rem;
     cursor: pointer;
 }
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.project-card {
+    padding: 1.25rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f5f5f5;
+    color: #222;
+}
+
+.project-card h3 {
+    margin-top: 0;
+}
+
+.project-card a {
+    margin-right: 0.75rem;
+}
+
+body.dark-mode .project-card {
+    background: #262626;
+    color: #f5f5f5;
+    border-color: #555;
+}
