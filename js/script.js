@@ -3,18 +3,14 @@ function setupNavigation() {
     const toggle = document.querySelector("#nav-toggle");
     const nav = document.querySelector("#primary-nav");
 
-    if (!toggle || !nav) {
-        return;
-    }
+    if (!toggle || !nav) return;
 
     function closeMenu(returnFocus = false) {
         nav.hidden = true;
         toggle.setAttribute("aria-expanded", "false");
         toggle.setAttribute("aria-label", "Open navigation menu");
 
-        if (returnFocus) {
-            toggle.focus();
-        }
+        if (returnFocus) toggle.focus();
     }
 
     function openMenu() {
@@ -34,9 +30,7 @@ function setupNavigation() {
     });
 
     nav.addEventListener("click", (event) => {
-        if (event.target.closest("a")) {
-            closeMenu();
-        }
+        if (event.target.closest("a")) closeMenu();
     });
 
     document.addEventListener("keydown", (event) => {
@@ -59,48 +53,108 @@ function setupNavigation() {
     });
 
     window.addEventListener("resize", () => {
-        if (window.innerWidth >= 768) {
-            closeMenu();
-        }
+        if (window.innerWidth >= 768) closeMenu();
     });
 }
 
 setupNavigation();
 
-// Lets users choose a theme and remembers their preference between visits.
+
+// Stores the visitor's settings in one shared settings object.
+let portfolioSettings = loadSettings();
+
+
+// Lets visitors choose a theme and remembers their preference.
 function setupDarkMode() {
     const toggle = document.querySelector("#theme-toggle");
 
     if (!toggle) return;
 
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-    ).matches;
+    function applyTheme(theme) {
+        const isDark = theme === "dark";
 
-    const useDarkMode = savedTheme
-        ? savedTheme === "dark"
-        : prefersDark;
-
-    function applyTheme(isDark) {
-        document.body.classList.toggle("dark-mode", isDark);
+        document.documentElement.classList.toggle("dark-mode", isDark);
         toggle.setAttribute("aria-pressed", String(isDark));
         toggle.textContent = isDark
             ? "Enable light mode"
             : "Enable dark mode";
     }
 
-    applyTheme(useDarkMode);
+    applyTheme(portfolioSettings.theme);
 
     toggle.addEventListener("click", () => {
-        const isDark = !document.body.classList.contains("dark-mode");
+        const isDark = !document.documentElement.classList.contains("dark-mode");
+        const newTheme = isDark ? "dark" : "light";
 
-        applyTheme(isDark);
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+        portfolioSettings = {
+            ...portfolioSettings,
+            theme: newTheme
+        };
+
+        applyTheme(newTheme);
+        saveSettings(portfolioSettings);
     });
 }
 
 setupDarkMode();
+
+
+// Updates and displays the visitor's last-visit information.
+function setupLastVisit() {
+    const lastVisitElement = document.querySelector("#last-visit");
+
+    const previousVisit = portfolioSettings.lastVisit;
+
+    if (lastVisitElement) {
+        lastVisitElement.textContent = previousVisit
+            ? `Your previous visit: ${new Date(previousVisit).toLocaleString()}`
+            : "Welcome! This is your first recorded visit.";
+    }
+
+    portfolioSettings = {
+        ...portfolioSettings,
+        lastVisit: new Date().toISOString()
+    };
+
+    saveSettings(portfolioSettings);
+}
+
+setupLastVisit();
+function setupLastVisit() {
+    portfolioSettings = {
+        ...portfolioSettings,
+        lastVisit: new Date().toISOString()
+    };
+
+    saveSettings(portfolioSettings);
+}
+
+setupLastVisit();
+
+
+// Stores a visitor name when a visitor-name input is added to the page.
+function setupVisitorName() {
+    const nameInput = document.querySelector("#visitor-name");
+    const saveButton = document.querySelector("#save-visitor-name");
+
+    if (!nameInput || !saveButton) return;
+
+    nameInput.value = portfolioSettings.visitorName;
+
+    saveButton.addEventListener("click", () => {
+        const visitorName = nameInput.value.trim();
+
+        portfolioSettings = {
+            ...portfolioSettings,
+            visitorName
+        };
+
+        saveSettings(portfolioSettings);
+    });
+}
+
+setupVisitorName();
+
 
 const projects = [
     {
@@ -125,6 +179,7 @@ const projects = [
         repoUrl: ""
     }
 ];
+
 
 // Builds project cards from data so portfolio content can be updated without hard-coding each card.
 function renderProjects(projectItems) {
@@ -166,6 +221,7 @@ function renderProjects(projectItems) {
     });
 }
 
+
 // Prevents project cards from displaying links that use unsupported or unsafe URL protocols.
 function isValidHttpUrl(value) {
     try {
@@ -178,10 +234,14 @@ function isValidHttpUrl(value) {
 
 renderProjects(projects);
 
+
 // Validates contact details before submission and helps users locate and correct invalid fields.
 function setupContactForm() {
     const form = document.querySelector("#contact-form");
+
     if (!form) return;
+
+    const status = document.querySelector("#form-status");
 
     const fields = [
         {
@@ -223,12 +283,12 @@ function setupContactForm() {
     ];
 
     function validateField(field) {
-        const message = field.validate(field.input.value);
-
-        if (!field.error) {
-        console.error("Missing error message element for:", field.label);
-        return !message;
+        if (!field.input || !field.error) {
+            console.error("Missing form element for:", field.label);
+            return false;
         }
+
+        const message = field.validate(field.input.value);
 
         field.error.textContent = message;
 
@@ -242,6 +302,8 @@ function setupContactForm() {
     }
 
     fields.forEach((field) => {
+        if (!field.input) return;
+
         field.input.addEventListener("input", () => {
             validateField(field);
         });
@@ -255,14 +317,19 @@ function setupContactForm() {
         );
 
         if (invalidFields.length > 0) {
-            document.querySelector("#form-status").textContent =
-                "Please correct the highlighted fields.";
+            if (status) {
+                status.textContent =
+                    "Please correct the highlighted fields.";
+            }
+
             invalidFields[0].input.focus();
             return;
         }
 
-        document.querySelector("#form-status").textContent =
-            "Form validation successful. No message was sent because this portfolio has no backend connected.";
+        if (status) {
+            status.textContent =
+                "Form validation successful. No message was sent because this portfolio has no backend connected.";
+        }
     });
 }
 

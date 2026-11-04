@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
+
     <link rel="stylesheet" href="css/style.css">
+    
+    <script src="js/storage.js"></script>
+    <script src="js/theme-init.js"></script>
+
     <script src="js/script.js" defer></script>
 </head>
 <body>
     <header class="site-header">
         <a class="logo" href="#home">My Portfolio</a>
+
         <button id="theme-toggle" type="button" aria-pressed="false">
-    Enable dark mode
-</button>
+            Enable dark mode
+        </button>
 
         <button
             id="nav-toggle"
@@ -40,6 +46,22 @@
         </section>
 
         <section id="about">
+    <h2>About Me</h2>
+    <p>This section will introduce me and my creative interests.</p>
+
+    <div class="visitor-welcome">
+        <p id="last-visit"></p>
+        <label for="visitor-name">Your name:</label>
+        <input
+            id="visitor-name"
+            type="text"
+            placeholder="Enter your name">
+
+        <button id="save-visitor-name" type="button">
+            Save Name
+        </button>
+    </div>
+</section>
             <h2>About Me</h2>
             <p>This section will introduce me and my creative interests.</p>
         </section>
@@ -51,36 +73,44 @@
 
         <section id="contact">
             <h2>Contact Me</h2>
-           
-            <section id="contact">
-    <h2>Contact Me</h2>
 
-    <form id="contact-form" novalidate>
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" required
-                   aria-describedby="name-error">
-            <p id="name-error" class="field-error" aria-live="polite"></p>
-        </div>
+            <form id="contact-form" novalidate>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        aria-describedby="name-error">
+                    <p id="name-error" class="field-error" aria-live="polite"></p>
+                </div>
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required
-                   aria-describedby="email-error">
-            <p id="email-error" class="field-error" aria-live="polite"></p>
-        </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        aria-describedby="email-error">
+                    <p id="email-error" class="field-error" aria-live="polite"></p>
+                </div>
 
-        <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" required
-                      aria-describedby="message-error"></textarea>
-            <p id="message-error" class="field-error" aria-live="polite"></p>
-        </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="5"
+                        required
+                        aria-describedby="message-error"></textarea>
+                    <p id="message-error" class="field-error" aria-live="polite"></p>
+                </div>
 
-        <button type="submit">Send Message</button>
-        <p id="form-status" role="status" aria-live="polite"></p>
-    </form>
-</section>
+                <button type="submit">Send Message</button>
+                <p id="form-status" role="status" aria-live="polite"></p>
+            </form>
         </section>
     </main>
 
