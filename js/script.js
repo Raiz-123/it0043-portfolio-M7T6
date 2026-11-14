@@ -1,4 +1,3 @@
-// Keeps the navigation accessible and lets users open or dismiss the menu.
 function setupNavigation() {
     const toggle = document.querySelector("#nav-toggle");
     const nav = document.querySelector("#primary-nav");
@@ -120,19 +119,7 @@ function setupLastVisit() {
 }
 
 setupLastVisit();
-function setupLastVisit() {
-    portfolioSettings = {
-        ...portfolioSettings,
-        lastVisit: new Date().toISOString()
-    };
 
-    saveSettings(portfolioSettings);
-}
-
-setupLastVisit();
-
-
-// Stores a visitor name when a visitor-name input is added to the page.
 function setupVisitorName() {
     const nameInput = document.querySelector("#visitor-name");
     const saveButton = document.querySelector("#save-visitor-name");
@@ -180,8 +167,6 @@ const projects = [
     }
 ];
 
-
-// Builds project cards from data so portfolio content can be updated without hard-coding each card.
 function renderProjects(projectItems) {
     const container = document.querySelector("#project-list");
 
@@ -221,8 +206,6 @@ function renderProjects(projectItems) {
     });
 }
 
-
-// Prevents project cards from displaying links that use unsupported or unsafe URL protocols.
 function isValidHttpUrl(value) {
     try {
         const url = new URL(value);
@@ -234,8 +217,6 @@ function isValidHttpUrl(value) {
 
 renderProjects(projects);
 
-
-// Validates contact details before submission and helps users locate and correct invalid fields.
 function setupContactForm() {
     const form = document.querySelector("#contact-form");
 
